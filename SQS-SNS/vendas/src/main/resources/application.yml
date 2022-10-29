@@ -1,0 +1,9 @@
+cloud:
+  aws:
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    sns:
+      topic:
+        vendas:
+          arn: arn:aws:sns:sa-east-1:556453201432:vendas-topico
