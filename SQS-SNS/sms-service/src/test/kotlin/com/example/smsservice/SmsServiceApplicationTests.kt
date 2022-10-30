@@ -1,10 +1,10 @@
-package com.sns.service.vendas
+package com.example.smsservice
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class ApplicationTests {
+class SmsServiceApplicationTests {
 
 	@Test
 	fun contextLoads() {

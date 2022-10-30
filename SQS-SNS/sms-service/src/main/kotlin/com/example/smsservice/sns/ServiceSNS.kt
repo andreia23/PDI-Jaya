@@ -1,17 +1,15 @@
-package com.sns.service.vendas.service
+package com.example.smsservice.sns
 
 import com.amazonaws.services.sns.AmazonSNS
-import com.amazonaws.services.sns.model.PublishResult
 import com.amazonaws.services.sns.model.Topic
+import com.example.smsservice.sqs.MessageSQS
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sns.service.vendas.event.SaleEvent
-import com.sns.service.vendas.model.Saler
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 
 @Service
-class SnsService(
+class ServiceSNS(
     var snsClient: AmazonSNS,
     @Qualifier("vendasTopico")
     var vendasTopico: Topic
@@ -19,11 +17,11 @@ class SnsService(
 
     val mapper: ObjectMapper = ObjectMapper()
 
-    fun publishSalerEvent(salerRequest: Saler?) {
+    fun sendSms(messageSQS: MessageSQS) {
         try {
-            val event = SaleEvent(salerRequest!!.value, salerRequest.idStore, salerRequest.products, salerRequest.adress, salerRequest.idClient, salerRequest.idSale)
-            val message = mapper.writeValueAsString(event)
-            val publishResult = snsClient.publish(
+            val message =
+                "Olá, a compra no valor de " + messageSQS.value + "na loja " + messageSQS.idStore + "foi confirmada! Os produtos foram " + messageSQS.products
+            snsClient.publish(
                 vendasTopico.getTopicArn(),
                 message
             )

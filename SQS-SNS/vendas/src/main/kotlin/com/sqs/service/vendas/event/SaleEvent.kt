@@ -1,8 +1,8 @@
-package com.sns.service.vendas.model
+package com.sqs.service.vendas.event
 
 import java.math.BigDecimal
 
-data class Saler(
+data class SaleEvent(
     val value: BigDecimal,
 
     val idStore: String,
@@ -14,5 +14,4 @@ data class Saler(
     val idClient: String,
 
     val idSale: String,
-
-    )
+)
