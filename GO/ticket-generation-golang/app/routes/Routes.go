@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"ticket-generation-golang/app/controller"
@@ -8,6 +9,7 @@ import (
 
 func HandleRequest() {
 	endpoint := "/rest/bankslips"
-	http.HandleFunc(endpoint, controller.CreateBankSlips)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	router := mux.NewRouter()
+	router.HandleFunc(endpoint, controller.CreateBankSlips).Methods("POST")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
