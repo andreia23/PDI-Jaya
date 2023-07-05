@@ -11,5 +11,5 @@ func HandleRequest() {
 	endpoint := "/rest/bankslips"
 	router := mux.NewRouter()
 	router.HandleFunc(endpoint, controller.CreateBankSlips).Methods("POST")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8050", router))
 }

@@ -2,31 +2,39 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 	"ticket-generation-golang/app/domain/entity/request"
 	"ticket-generation-golang/app/domain/service"
 )
 
 func CreateBankSlips(w http.ResponseWriter, r *http.Request) {
+
+	if r.ContentLength == 0 {
+		http.Error(w, "Bankslip not provided in the request body", http.StatusBadRequest)
+		return
+	}
+
 	var bankSlipRequest request.BankSlipRequest
-	err := json.NewDecoder(r.Body).Decode(&bankSlipRequest)
+	_ = json.NewDecoder(r.Body).Decode(&bankSlipRequest)
+
+	validate := validator.New()
+	err := validate.Struct(bankSlipRequest)
+
 	if err != nil {
-		http.Error(w, "Erro ao decodificar o corpo da requisição", http.StatusBadRequest)
+		http.Error(w, "Missing or invalid required fields", http.StatusUnprocessableEntity)
 		return
 	}
 
 	response := service.CreateBankSlips(bankSlipRequest)
 
-	// Converta a resposta em JSON
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
-		http.Error(w, "Erro ao converter a resposta em JSON", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// Defina o cabeçalho Content-Type como application/json
 	w.Header().Set("Content-Type", "application/json")
-
-	// Escreva a resposta JSON
+	w.WriteHeader(http.StatusCreated)
 	w.Write(jsonResponse)
 }
