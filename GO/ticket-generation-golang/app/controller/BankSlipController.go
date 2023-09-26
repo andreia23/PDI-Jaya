@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"net/http"
-	"ticket-generation-golang/app/domain/entity/request"
+	"ticket-generation-golang/app/domain/entity"
 	"ticket-generation-golang/app/domain/service"
 )
 
@@ -15,7 +15,7 @@ func CreateBankSlips(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var bankSlipRequest request.BankSlipRequest
+	var bankSlipRequest entity.BankSlipRequest
 	_ = json.NewDecoder(r.Body).Decode(&bankSlipRequest)
 
 	validate := validator.New()

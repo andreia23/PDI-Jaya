@@ -1,5 +1,13 @@
 version: "3.9"
 services:
+#  go-app:
+#    build: .
+#    container_name: bankslips-app
+#    depends_on:
+#      - mysql-db
+#    ports:
+#      - "8080:8080"
+
   mysql-db:
     image: mysql:latest
     container_name: bankslips
@@ -8,11 +16,3 @@ services:
       MYSQL_DATABASE: bankslips-db
     ports:
       - "3306:3306"
-
-  go-app:
-    build: .
-    container_name: bankslips-app
-    depends_on:
-      - bankslips
-    ports:
-      - "8080:8080"
