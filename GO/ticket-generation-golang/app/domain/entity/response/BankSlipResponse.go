@@ -1,4 +1,4 @@
-package entity
+package response
 
 import (
 	"github.com/google/uuid"
@@ -6,12 +6,10 @@ import (
 	"time"
 )
 
-type BankSlip struct {
+type BankSlipResponse struct {
 	Id           uuid.UUID       `json:"id"`
-	PaymentDate  time.Time       `json:"payment_date"`
-	DueDate      time.Time       `json:"due_date"`
+	DueData      time.Time       `json:"due_data"`
 	TotalInCents decimal.Decimal `json:"total_in_cents"`
 	Customer     string          `json:"customer"`
-	Fine         string          `json:"fine"`
 	Status       string          `json:"status"`
 }

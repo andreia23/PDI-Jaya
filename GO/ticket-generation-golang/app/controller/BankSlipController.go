@@ -3,8 +3,9 @@ package controller
 import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
+	"github.com/gorilla/mux"
 	"net/http"
-	"ticket-generation-golang/app/domain/entity"
+	"ticket-generation-golang/app/domain/entity/request"
 	"ticket-generation-golang/app/domain/service"
 )
 
@@ -15,7 +16,7 @@ func CreateBankSlips(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var bankSlipRequest entity.BankSlipRequest
+	var bankSlipRequest request.BankSlipRequest
 	_ = json.NewDecoder(r.Body).Decode(&bankSlipRequest)
 
 	validate := validator.New()
@@ -36,5 +37,42 @@ func CreateBankSlips(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	w.Write(jsonResponse)
+}
+
+func GetAllBankSlips(w http.ResponseWriter, r *http.Request) {
+
+	response := service.GetAllBankSlips()
+
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResponse)
+}
+
+func FindBankSlipById(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	response := service.FindBankSlipById(id)
+	if response == nil {
+		http.Error(w, "Bankslip not found with the specified id", http.StatusNotFound)
+		return
+	}
+
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
 }

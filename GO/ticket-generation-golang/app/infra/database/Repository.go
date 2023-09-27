@@ -29,11 +29,17 @@ func GetListBankSlips() []entity.BankSlip {
 	return bankSlips
 }
 
-func FindBankSlipById(id string) entity.BankSlip {
+func FindBankSlipById(id string) *entity.BankSlip {
 	dataBase := connectionDataBase()
 	var bankSlip entity.BankSlip
-	dataBase.First(&bankSlip, id)
-	return bankSlip
+
+	if err := dataBase.Where("id = ?", id).First(&bankSlip).Error; err != nil {
+		// Retorne nil em caso de erro
+		return nil
+	}
+
+	// Retorne um ponteiro para bankSlip
+	return &bankSlip
 }
 
 func UpdateBankSlip(id string) {
